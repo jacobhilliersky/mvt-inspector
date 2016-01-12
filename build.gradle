@@ -38,7 +38,7 @@ task uberjar(type: Jar) {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.10'
 }
 
 task stage(dependsOn: ['clean', 'build', 'uberjar'])
