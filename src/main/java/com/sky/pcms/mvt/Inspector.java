@@ -9,8 +9,7 @@ import java.util.Map;
 
 import static java.lang.Integer.valueOf;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
-import static spark.Spark.get;
-import static spark.Spark.port;
+import static spark.Spark.*;
 
 public class Inspector {
 
@@ -18,6 +17,8 @@ public class Inspector {
 
     public static void main(String[] args) {
         setPort();
+
+        staticFileLocation("/public");
 
         get("/", (request, response) -> {
             Map<String, String> headers = new HashMap<>();
@@ -46,14 +47,14 @@ public class Inspector {
         }, JSON_TRANSFORMER);
 
         get("/signup", (request, response) -> {
-            String buttonColour = "blue";
+            String buttonClass = "btn-info";
             if (equalsIgnoreCase(request.headers("exp_1"), "var_a")) {
-                buttonColour = "red";
+                buttonClass = "btn-success";
             } else if (equalsIgnoreCase(request.headers("exp_1"), "var_b")) {
-                buttonColour = "green";
+                buttonClass = "btn-danger";
             }
 
-            return ImmutableMap.of("buttonColour", buttonColour);
+            return ImmutableMap.of("buttonClass", buttonClass);
         }, JSON_TRANSFORMER);
 
         get("/sports", (request, response) -> {
