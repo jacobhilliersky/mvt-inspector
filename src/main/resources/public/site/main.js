@@ -33,15 +33,20 @@ app.config(function ($httpProvider, $routeProvider) {
     });
 });
 
-app.controller('AppController', function ($scope, $window, $route) {
+app.controller('AppController', function ($scope) {
+    $scope.navigation = {
+        proposition: ''
+    };
 });
 
-app.controller('SportsController', function ($scope, sports) {
+app.controller('SportsController', function ($scope, sports, $route) {
     $scope.imageUrl = sports.imageUrl;
+    $scope.navigation.proposition = $route.current.params.proposition;
 });
 
-app.controller('SignupController', function ($scope, signup) {
+app.controller('SignupController', function ($scope, signup, $route) {
     $scope.buttonClass = signup.buttonClass;
+    $scope.navigation.proposition = $route.current.params.proposition;
 });
 
 app.factory('Sports', function ($resource) {
