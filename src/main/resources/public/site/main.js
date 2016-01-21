@@ -24,25 +24,6 @@ app.config(function ($httpProvider, $routeProvider) {
 });
 
 app.controller('AppController', function ($scope, $window, $route) {
-    $scope.navigation = {
-        propositions: ['NOWTV:ESP', 'NOWTV:UK'],
-        selected: 'NOWTV:ESP'
-    };
-
-    $scope.storeSelectedProposition = function () {
-        $window.localStorage.proposition = $scope.navigation.selected;
-    };
-
-    $scope.changeProposition = function () {
-        $scope.storeSelectedProposition();
-        $route.reload();
-    };
-
-    if ($window.localStorage.proposition) {
-        $scope.navigation.selected = $window.localStorage.proposition;
-    } else {
-        $scope.storeSelectedProposition();
-    }
 });
 
 app.controller('SportsController', function ($scope, sports) {
@@ -61,13 +42,18 @@ app.factory('Signup', function ($resource) {
     return $resource('/signup');
 });
 
-app.factory('PropsitionHeaderInterceptor', function ($q, $window) {
+app.factory('PropsitionHeaderInterceptor', function ($q, $location) {
     return {
         request: function (config) {
             config.headers = config.headers || {};
-            if ($window.localStorage.proposition) {
-                config.headers.Proposition = $window.localStorage.proposition;
+
+            var proposition = 'NOWTV:UK';
+            if ($location.host().indexOf('.es') > -1) {
+                proposition = 'NOWTV:ESP';
             }
+
+            config.headers.Proposition = proposition;
+
             return config;
         },
         response: function (response) {
