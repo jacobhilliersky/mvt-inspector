@@ -1,5 +1,6 @@
 package com.sky.pcms.mvt;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import spark.ResponseTransformer;
 
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Integer.valueOf;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static spark.Spark.get;
 import static spark.Spark.port;
 
@@ -41,6 +43,28 @@ public class Inspector {
             details.put("port", request.port());
 
             return details;
+        }, JSON_TRANSFORMER);
+
+        get("/signup", (request, response) -> {
+            String buttonColour = "blue";
+            if (equalsIgnoreCase(request.headers("exp_1"), "var_a")) {
+                buttonColour = "red";
+            } else if (equalsIgnoreCase(request.headers("exp_1"), "var_b")) {
+                buttonColour = "green";
+            }
+
+            return ImmutableMap.of("buttonColour", buttonColour);
+        }, JSON_TRANSFORMER);
+
+        get("/sports", (request, response) -> {
+            String imageUrl = "https://d2kmm3vx031a1h.cloudfront.net/JIZoEV6gQOSNf6CMBT5q_485185692.jpg";
+            if (equalsIgnoreCase(request.headers("exp_2"), "var_a")) {
+                imageUrl = "https://d2kmm3vx031a1h.cloudfront.net/r8xt9OyFTGKWqO3TpqP5_501242676.jpg";
+            } else if (equalsIgnoreCase(request.headers("exp_2"), "var_b")) {
+                imageUrl = "https://d2kmm3vx031a1h.cloudfront.net/DgSxHj5uSt2Xk0UPLq43_452936468.jpg";
+            }
+
+            return ImmutableMap.of("imageUrl", imageUrl);
         }, JSON_TRANSFORMER);
     }
 
