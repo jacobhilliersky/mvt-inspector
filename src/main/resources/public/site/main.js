@@ -1,22 +1,32 @@
 var app = angular.module('app', ['ngRoute', 'ngResource']);
 
 app.config(function ($httpProvider, $routeProvider) {
-    $httpProvider.interceptors.push('PropsitionHeaderInterceptor');
-
-    $routeProvider.when('/sports', {
+    $routeProvider.when('/sports/:proposition', {
         templateUrl: 'sports.html',
         controller: 'SportsController',
         resolve: {
-            sports: function ($route, Sports) {
+            sports: function ($route, $http, Sports) {
+                var proposition = "NOWTV:UK";
+                if ($route.current.params.proposition == "es") {
+                    proposition = 'NOWTV:ESP';
+                }
+                $http.defaults.headers.common['Proposition'] = proposition;
+
                 return Sports.get().$promise;
             }
         }
     });
-    $routeProvider.when('/signup', {
+    $routeProvider.when('/signup/:proposition', {
         templateUrl: 'signup.html',
         controller: 'SignupController',
         resolve: {
-            signup: function ($route, Signup) {
+            signup: function ($route, $http, Signup) {
+                var proposition = "NOWTV:UK";
+                if ($route.current.params.proposition == "es") {
+                    proposition = 'NOWTV:ESP';
+                }
+                $http.defaults.headers.common['Proposition'] = proposition;
+
                 return Signup.get().$promise;
             }
         }
@@ -40,27 +50,4 @@ app.factory('Sports', function ($resource) {
 
 app.factory('Signup', function ($resource) {
     return $resource('/signup');
-});
-
-app.factory('PropsitionHeaderInterceptor', function ($q, $location) {
-    return {
-        request: function (config) {
-            config.headers = config.headers || {};
-
-            var proposition = 'NOWTV:UK';
-            if ($location.host().indexOf('.es') > -1) {
-                proposition = 'NOWTV:ESP';
-            }
-
-            config.headers.Proposition = proposition;
-
-            return config;
-        },
-        response: function (response) {
-            return response || $q.when(response);
-        },
-        responseError: function (response) {
-            return response || $q.when(response);
-        }
-    };
 });
