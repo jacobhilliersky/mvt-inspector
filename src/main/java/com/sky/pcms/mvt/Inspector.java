@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Integer.valueOf;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static spark.Spark.*;
 
 public class Inspector {
@@ -47,25 +46,27 @@ public class Inspector {
         }, JSON_TRANSFORMER);
 
         get("/signup", (request, response) -> {
-            String buttonClass = "btn-info";
-            if (equalsIgnoreCase(request.headers("exp_1"), "var_a")) {
-                buttonClass = "btn-success";
-            } else if (equalsIgnoreCase(request.headers("exp_1"), "var_b")) {
-                buttonClass = "btn-danger";
-            }
+            return ImmutableMap.of("buttonClass", "btn-info");
+        }, JSON_TRANSFORMER);
 
-            return ImmutableMap.of("buttonClass", buttonClass);
+        get("/signup-variant-1", (request, response) -> {
+            return ImmutableMap.of("buttonClass", "btn-success");
+        }, JSON_TRANSFORMER);
+
+        get("/signup-variant-2", (request, response) -> {
+            return ImmutableMap.of("buttonClass", "btn-danger");
         }, JSON_TRANSFORMER);
 
         get("/sports", (request, response) -> {
-            String imageUrl = "https://d2kmm3vx031a1h.cloudfront.net/JIZoEV6gQOSNf6CMBT5q_485185692.jpg";
-            if (equalsIgnoreCase(request.headers("exp_2"), "var_a")) {
-                imageUrl = "https://d2kmm3vx031a1h.cloudfront.net/r8xt9OyFTGKWqO3TpqP5_501242676.jpg";
-            } else if (equalsIgnoreCase(request.headers("exp_2"), "var_b")) {
-                imageUrl = "https://d2kmm3vx031a1h.cloudfront.net/DgSxHj5uSt2Xk0UPLq43_452936468.jpg";
-            }
+            return ImmutableMap.of("imageUrl", "https://d2kmm3vx031a1h.cloudfront.net/JIZoEV6gQOSNf6CMBT5q_485185692.jpg");
+        }, JSON_TRANSFORMER);
 
-            return ImmutableMap.of("imageUrl", imageUrl);
+        get("/sports-variant-1", (request, response) -> {
+            return ImmutableMap.of("imageUrl", "https://d2kmm3vx031a1h.cloudfront.net/r8xt9OyFTGKWqO3TpqP5_501242676.jpg");
+        }, JSON_TRANSFORMER);
+
+        get("/sports-variant-2", (request, response) -> {
+            return ImmutableMap.of("imageUrl", "https://d2kmm3vx031a1h.cloudfront.net/DgSxHj5uSt2Xk0UPLq43_452936468.jpg");
         }, JSON_TRANSFORMER);
     }
 
